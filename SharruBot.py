@@ -22,7 +22,7 @@ HOST = "irc.twitch.tv"
 PORT = 6667
 PASS = CONFIG[1] # your Twitch OAuth token
 IDENT = "sharrubot"  # Twitch username your using for your bot
-CHANNEL = input("Please input the channel you would like me to connect to or blank to connect to your default(" + CONFIG[0] + ")")
+CHANNEL = input("Please input the channel you would like me to connect to or blank to connect to your default(" + CONFIG[0] + "):\r\n")
 if (CHANNEL == ""):
         CHANNEL = CONFIG[0]
 PERMISSIONS_FILE = open("PERMISSIONS.txt")
@@ -38,7 +38,7 @@ def openSocket():
                 s.send(bytes("PASS " + PASS + "\r\n", "utf-8"))
                 s.send(bytes("NICK " + IDENT + "\r\n", "utf-8"))
                 s.send(bytes("JOIN " + "#" +  CHANNEL + "\r\n", "utf-8"))
-                s.send(bytes("PRIVMSG " + "#" + CHANNEL + " :" + "I HAVE ARRIVED!" + "\r\n", "utf-8"))
+                sendMessage(s, "/me is now live in this chat!")
                 return s
         except IndexError:
                 pass
