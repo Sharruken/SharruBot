@@ -46,7 +46,6 @@ def openSocket():
 def sendMessage(s, message):
         messageTemp = "PRIVMSG " + "#" + CHANNEL + " :" + message
         s.send(bytes(messageTemp + "\r\n", "utf-8"))
-        print("Sent: " + messageTemp)
 
 def joinRoom(s):
         try:
@@ -125,7 +124,7 @@ while True:
                 if (str(chat) not in (chatExclusions)) and str(message) != ("None") and (TOGGLE == "ON") and not str(message).startswith("!"):
                         s.send(bytes("PRIVMSG " + "#" + CHANNEL + " :" + str(chat) + " - " + str(user) + ": " + str(message) + "\r\n", "utf-8"))
                 if str(message).startswith('!') and "!bye" in str(message) and str(user) in PERMISSIONS:
-                        s.send(bytes("PRIVMSG " + "#" + CHANNEL + " :" + "Leaving chat!" + "\r\n", "utf-8"))
+                        sendMessage(s, "Leaving chat!")
                         chatNum = len(connectedChats)
                         for i in range(chatNum):
                                 s.send(bytes("PART " + "#" + connectedChats[i] + "\r\n", "utf-8"))
@@ -135,27 +134,35 @@ while True:
                         sys.exit()
                 if str(message).startswith('!') and "!part" in str(message) and str(user) in PERMISSIONS:
                         PART = str(message).split()
-                        s.send(bytes("PRIVMSG " + "#" + PART[1] + " :" + user + " has unlinked your chat from theirs! \r\n", "utf-8" ))
+                        s.send(bytes("PRIVMSG " + "#" + PART[1].lower() + " :" + user + " has unlinked your chat from theirs! \r\n", "utf-8" ))
                         time.sleep(0.5)
-                        s.send(bytes("PART " + "#" + PART[1] + "\r\n", "utf-8"))
+                        try:
+                                connectedChats.remove(PART[1].lower())
+                                sendMessage(s, "Leaving " + PART[1].lower() + "'s chat!")
+                                s.send(bytes("PART " + "#" + PART[1].lower() + "\r\n", "utf-8"))
+                        except ValueError:
+                                sendMessage(s, "Error: Not connected to " + PART[1].lower() + "'s chat!")
                 if str(message).startswith('!') and "!connect" in str(message) and str(user) in PERMISSIONS:
                         CONNECT = str(message).split()
-                        s.send(bytes("JOIN " + "#" +  CONNECT[1].lower() + "\r\n", "utf-8"))
-                        s.send(bytes("PRIVMSG " + "#" + CHANNEL + " :" + "Joining " +CONNECT[1] + "'s chat!" + "\r\n", "utf-8"))
-                        connectedChats.append(CONNECT[1])
-                        time.sleep(0.5)
-                        s.send(bytes("PRIVMSG " + "#" + CONNECT[1] + " :" + user + " has just connected their chat to yours!" + "\r\n", "utf-8"))
-                if str(message).startswith('!') and "!toggle" in str(message) and (TOGGLE == "OFF") and str(user) in PERMISSIONS:
+                        if CONNECT[1].lower() not in connectedChats:
+                                s.send(bytes("JOIN " + "#" +  CONNECT[1].lower() + "\r\n", "utf-8"))
+                                sendMessage(s, "Joining " +CONNECT[1].lower() + "'s chat!")
+                                connectedChats.append(CONNECT[1].lower())
+                                time.sleep(0.5)
+                                s.send(bytes("PRIVMSG " + "#" + CONNECT[1].lower() + " :" + user + " has just connected their chat to yours!" + "\r\n", "utf-8"))
+                        elif CONNECT[1].lower() in connectedChats:
+                                sendMessage(s, "Already connected to that chat!")
+                if str(message).startswith('!') and "!Toggle" in str(message) and (TOGGLE == "OFF") and str(user) in PERMISSIONS:
                         TOGGLE = "ON"
-                        s.send(bytes("PRIVMSG " + "#" + CONNECT[1] + " :" + "Connected chat feature is now: " + TOGGLE + "\r\n", "utf-8"))
-                elif str(message).startswith('!') and "!toggle" in str(message) and (TOGGLE == "ON") and str(user) in PERMISSIONS:
+                        sendMessage(s, "Connected chat feature is now: " + TOGGLE)
+                elif str(message).startswith('!') and "!Toggle" in str(message) and (TOGGLE == "ON") and str(user) in PERMISSIONS:
                         TOGGLE = "OFF"
-                        s.send(bytes("PRIVMSG " + "#" + CONNECT[1] + " :" + "Connected chat feature is now: " + TOGGLE + "\r\n", "utf-8"))
+                        sendMessage(s, "Connected chat feature is now: " + TOGGLE)
                 if str(message).startswith('!') and "!shoutout" in str(message) and str(user) in PERMISSIONS:
                         SHOUT = str(message).split()
-                        s.send(bytes("PRIVMSG " + "#" + CHANNEL + " :" + "Go watch " + SHOUT[1] + " over at https://www.twitch.tv/" + SHOUT[1] + "\r\n", "utf-8"))
+                        sendMessage(s, "Go watch " + SHOUT[1] + " over at https://www.twitch.tv/" + SHOUT[1])
                 if str(message).startswith('!') and "!chats" in str(message) and str(user) in PERMISSIONS:
-                        s.send(bytes("PRIVMSG " + "#" + CHANNEL + " :" + str(connectedChats) + "\r\n", "utf-8"))
+                        sendMessage(s, str(connectedChats))
                 break
 
 
