@@ -145,10 +145,10 @@ while True:
                         connectedChats.append(CONNECT[1])
                         time.sleep(0.5)
                         s.send(bytes("PRIVMSG " + "#" + CONNECT[1] + " :" + user + " has just connected their chat to yours!" + "\r\n", "utf-8"))
-                if str(message).startswith('!') and "!Toggle" in str(message) and (TOGGLE == "OFF") and str(user) in PERMISSIONS:
+                if str(message).startswith('!') and "!toggle" in str(message) and (TOGGLE == "OFF") and str(user) in PERMISSIONS:
                         TOGGLE = "ON"
                         s.send(bytes("PRIVMSG " + "#" + CONNECT[1] + " :" + "Connected chat feature is now: " + TOGGLE + "\r\n", "utf-8"))
-                elif str(message).startswith('!') and "!Toggle" in str(message) and (TOGGLE == "ON") and str(user) in PERMISSIONS:
+                elif str(message).startswith('!') and "!toggle" in str(message) and (TOGGLE == "ON") and str(user) in PERMISSIONS:
                         TOGGLE = "OFF"
                         s.send(bytes("PRIVMSG " + "#" + CONNECT[1] + " :" + "Connected chat feature is now: " + TOGGLE + "\r\n", "utf-8"))
                 if str(message).startswith('!') and "!shoutout" in str(message) and str(user) in PERMISSIONS:
