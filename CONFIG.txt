@@ -1,0 +1,2 @@
+'replace this line with your default stream channel (No caps)'
+'replace this line with your full oauth key'

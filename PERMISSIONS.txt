@@ -1,0 +1,1 @@
+'add names to use for permissions, one name per line, no caps'
