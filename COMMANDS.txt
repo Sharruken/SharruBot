@@ -1,0 +1,2 @@
+!Test
+Commands are formatted like this, always make sure to hit return if you're adding them manually, so that any new commands added by the bot are added underneath this
