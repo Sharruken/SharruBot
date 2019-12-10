@@ -32,7 +32,6 @@ PERMISSIONS = list(line.rstrip('\n') for line in PERMISSIONS_FILE.readlines())
 PERMISSIONS_FILE.close()
 connectedChats = [CHANNEL]
 Active = "True"
-badChars = ["[", "]", "'"]
 chat = ""
 excludedCommands = ['!bye', '!connect', '!part', '!shoutout', '!toggle', 'toggletimer', '!addcom']
 
